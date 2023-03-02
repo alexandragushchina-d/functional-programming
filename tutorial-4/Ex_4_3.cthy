@@ -1,0 +1,19 @@
+data List a = [] | a : List a
+
+length [] = 0 
+length (x:xs) = length xs + 1
+
+replicate 0 x = []
+replicate n x = x : replicate (n - 1) x
+
+vectorSum [] ys = []
+vectorSum xs [] = []
+vectorSum (x:xs) (y:ys) = x + y : vectorSum xs ys
+
+axiom zeroAdd: 0 + b .=. b
+axiom addZero: b + 0 .=. b
+axiom addComm: x + y .=. y + x
+axiom addSubAssoc: (x + y) - z .=. x + (y - z)
+axiom subCancel: x - x .=. 0 
+
+goal vectorSum xs (replicate (length xs) 0) .=. xs

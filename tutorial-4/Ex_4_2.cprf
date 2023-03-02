@@ -1,0 +1,28 @@
+-- structural induction to prove the following identity:
+
+Lemma: concat (xss ++ yss) .=. concat xss ++ concat yss
+    Proof by induction on List xss
+    Case[]
+      To show: concat ([] ++ yss) .=. concat [] ++ concat yss
+      Proof
+                              concat ([] ++ yss)
+            (by def ++)   .=. concat yss
+            (by def ++)   .=. [] ++ concat yss
+        (by def concat)   .=. concat [] ++ concat yss
+
+      QED
+
+    Case xs:xss
+      To show: concat ((xs:xss) ++ yss) .=. concat (xs:xss) ++ concat yss
+      IH: concat (xss ++ yss) .=. concat xss ++ concat yss
+
+      Proof
+                                concat ((xs:xss) ++ yss)
+            (by def ++)   .=. concat (xs:(xss ++ yss))
+        (by def concat)   .=. xs ++ concat (xss ++ yss)
+                (by IH)   .=. xs ++ (concat xss ++ concat yss)
+          (by appAssoc)   .=. (xs ++ concat xss) ++ concat yss
+        (by def concat)   .=. concat (xs:xss) ++ concat yss
+
+    QED
+  QED

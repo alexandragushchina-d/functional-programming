@@ -1,0 +1,11 @@
+data List a = [] | a : List a
+
+[] ++ ys = ys
+(x:xs) ++ ys = x : (xs ++ ys)
+
+concat [] = []
+concat (xs:yss) = xs ++ concat yss
+
+axiom appAssoc: xs ++ (ys ++ zs) .=. (xs ++ ys) ++ zs
+
+goal concat (xss ++ yss) .=. concat xss ++ concat yss

@@ -1,0 +1,29 @@
+-- structural induction to prove the following identity:
+
+Lemma: vectorSum xs (replicate (length xs) 0) .=. xs
+    Proof by induction on List xs
+    Case[]
+      To show: vectorSum [] (replicate (length []) 0) .=. []
+      Proof
+                              vectorSum [] (replicate (length []) 0)
+      (by def vectorSum)   .=. []
+
+      QED
+
+    Case x:xs
+      To show: vectorSum (x:xs) (replicate (length (x:xs)) 0) .=. (x:xs)
+      IH: vectorSum xs (replicate (length xs) 0) .=. xs
+
+      Proof
+                              vectorSum (x:xs) (replicate (length (x:xs)) 0)
+        (by def length)   .=. vectorSum (x:xs) (replicate (length xs + 1) 0)
+     (by def replicate)   .=. vectorSum (x:xs) (0 : replicate (length xs + 1 - 1) 0)
+       (by addSubAssoc)   .=. vectorSum (x:xs) (0 : replicate (length xs + (1 - 1)) 0)
+         (by subCancel)   .=. vectorSum (x:xs) (0 : replicate (length xs + 0) 0)
+           (by addZero)   .=. vectorSum (x:xs) (0 : replicate (length xs) 0)
+     (by def vectorSum)   .=. x + 0 : vectorSum (xs) (replicate (length xs) 0)
+           (by addZero)   .=. x : vectorSum (xs) (replicate (length xs) 0)
+                (by IH)   .=. (x:xs)
+
+    QED
+  QED
