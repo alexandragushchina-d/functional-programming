@@ -1,0 +1,78 @@
+Lemma inord2_helper_h: inord2 t (xs ++ y:[]) .=. inord2 t xs ++ y:[]
+  Proof by induction on Tree t
+  Case Leaf
+    To show: inord2 Leaf (xs ++ y:[]) .=. inord2 Leaf xs ++ y:[]
+    Proof
+                              inord2 Leaf (xs ++ y:[])
+          (by def inord2) .=. xs ++ y:[]
+          (by def inord2) .=. inord2 Leaf xs ++ y:[]
+    QED
+
+  Case Node l v r
+    To show: inord2 (Node l v r) (xs ++ y:[]) .=. inord2 (Node l v r) xs ++ y:[]
+    IHl: inord2 l (xs ++ y:[]) .=. inord2 l xs ++ y:[]
+    IHr: inord2 r (xs ++ y:[]) .=. inord2 r xs ++ y:[]
+    Proof
+                               inord2 (Node l v r) (xs ++ y:[])
+          (by def inord2) .=.  inord2 l (v : inord2 r (xs ++ y:[]))
+          (by IHr)        .=.  inord2 l (v : (inord2 r xs ++ y:[]))
+          (by def ++)     .=.  inord2 l ((v : inord2 r xs) ++ y:[])
+          (by IHl)        .=.  inord2 l (v : inord2 r xs) ++ y:[]
+          (by def inord2) .=.  inord2 (Node l v r) xs ++ y:[]
+    QED
+QED
+
+Lemma inord2_helper: inord2 t (xs ++ ys) .=. inord2 t xs ++ ys
+  Proof by induction on List ys
+  Case []
+    To show: inord2 t (xs ++ []) .=. inord2 t xs ++ []
+    Proof
+                              inord2 t (xs ++ [])
+          (by app_null)   .=. inord2 t xs
+          (by app_null)   .=. inord2 t xs ++ []
+    QED
+
+  Case (y:ys)
+    To show: inord2 t (xs ++ (y:ys)) .=. inord2 t xs ++ (y:ys)
+    IH: inord2 t (xs ++ ys) .=. inord2 t xs ++ ys
+    Proof
+                              inord2 t (xs ++ (y:ys))
+            (by def ++)   .=. inord2 t (xs ++ (y : ([] ++ ys)))
+            (by def ++)   .=. inord2 t (xs ++ ((y:[]) ++ ys))
+          (by app_assoc)  .=. inord2 t ((xs ++ (y:[])) ++ ys)
+            (by IH)       .=. inord2 t (xs ++ y:[]) ++ ys
+    (by inord2_helper_h)  .=. (inord2 t xs ++ y:[]) ++ ys
+    (by app_assoc)        .=. inord2 t xs ++ ((y:[]) ++ ys)
+    (by def ++)           .=. inord2 t xs ++ y:([] ++ ys)
+            (by def ++)   .=. inord2 t xs ++ (y:ys)
+    QED
+QED
+
+
+Lemma: inord2 t [] .=. inord t
+  Proof by induction on Tree t
+  Case Leaf
+      To show: inord2 Leaf [] .=. inord Leaf
+      Proof
+                              inord2 Leaf []
+        (by def inord2)   .=. []
+        (by def inord)    .=. inord Leaf
+
+      QED
+
+  Case Node l v r
+      To show: inord2 (Node l v r) [] .=. inord (Node l v r)
+      IHl: inord2 l [] .=. inord l
+      IHr: inord2 r [] .=. inord r
+
+      Proof
+                              inord2 (Node l v r) []
+          (by def inord2) .=. inord2 l (v : inord2 r [])
+          (by IHr)        .=. inord2 l (v : inord r)
+          (by def ++)     .=. inord2 l ([] ++ v : inord r)
+  (by inord2_helper)      .=. inord2 l [] ++ v : inord r
+          (by IHl)        .=. inord l ++ v : inord r
+          (by def inord)  .=. inord (Node l v r)
+
+      QED
+  QED

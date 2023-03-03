@@ -1,0 +1,18 @@
+-- structural induction
+
+data List a = [] | a : List a
+data Tree a = Leaf | Node (Tree a) a (Tree a)
+
+[] ++ ys = ys
+(x:xs) ++ ys = x : xs ++ ys
+
+inord Leaf = []
+inord (Node l v r) = inord l ++ v : inord r
+
+inord2 Leaf xs = xs
+inord2 (Node l v r) xs = inord2 l (v : inord2 r xs)
+
+axiom app_null: xs ++ [] .=. xs
+axiom app_assoc: (xs ++ ys) ++ zs .=. xs ++ (ys ++ zs)
+
+goal inord2 t [] .=. inord t
